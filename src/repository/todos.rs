@@ -28,10 +28,20 @@ impl TodoRepository {
     &self,
     id: i32
   ) -> Option<todo::Model> {
-    Todo::find_by_id(id)
+    let todo = Todo::find_by_id(id)
       .one(&self.db_conn)
       .await
-      .expect("Failed to get todo")
+      .expect("Failed to get todo");
+
+    return match todo {
+      Some(todo) => {
+        debug!("Got todo: {}", todo.title);
+        todo.into()
+      },
+      None => {
+        None
+      }
+    }
   }
 
   pub async fn create_todo(
@@ -59,7 +69,7 @@ impl TodoRepository {
       .await
       .expect("Failed to get todo");
 
-    match todo {
+    return match todo {
       Some(todo) => {
         let mut todo: todo::ActiveModel = todo.into();
         todo.title = ActiveValue::Set(updated_todo.title.to_owned());
@@ -67,10 +77,10 @@ impl TodoRepository {
 
         let todo: todo::Model = todo.update(&self.db_conn).await.unwrap();
         debug!("Updated todo: {}", todo.title);
-        return todo.into();
+        todo.into()
       },
       None => {
-        return None;
+        None
       }
     }
   }
