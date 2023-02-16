@@ -1,0 +1,24 @@
+[package]
+name = "codebrains-actix-todo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4"
+actix-cors = "^0.6"
+dotenv = "^0.15"
+sea-orm = { version = "^0.9.2", features = [ "sqlx-postgres", "runtime-actix-native-tls", "macros" ] }
+async-std = { verison = "^1.0", features = [ "attributes", "tokio1" ] }
+serde = { version = "^1.0", features = [ "derive" ] }
+serde_json = "^1.0"
+tracing-subscriber = { verison = "^0.3", features = [ "env-filter" ] }
+futures = "^0.3"
+env_logger = "^0.9"
+log = "^0.4"
+migration = { path = "migration" }
+
+[dependencies.sea-orm-migration]
+version = "^0.9.2"
+features = [ "runtime-actix-native-tls", "sqlx-postgres" ]
